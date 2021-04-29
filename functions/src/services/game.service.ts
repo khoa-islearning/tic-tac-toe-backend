@@ -1,39 +1,24 @@
-import * as functions from "firebase-functions";
-import { CreateGameReqDto, CreateGameResDto } from "../dtos/game.dto";
+import { CreateGameReqDto, CreateGameResDto, JoinGameReqDto, JoinGameResDto } from "../dtos/game.dto";
 import { GameRepository } from "../repositories/game.repositories";
 import { GameSchema } from "../schema/game.schema";
 import { v4 as uuidv4 } from 'uuid';
-import { validate, ValidationError } from 'class-validator';
-import { plainToClass } from 'class-transformer';
 
 
 /**
  * 
- * @param request contains p1's user id, is
+ * @param uid 
+ * @param dto 
  * @returns 
  */
-export const createBoardService = async (request: functions.https.Request) => {
-
-
-    const reqBody: CreateGameReqDto = plainToClass(CreateGameReqDto, request.body);
-
-    const errors: ValidationError[] = await validate(reqBody);
-    if (errors.length > 0) {
-        const message = errors.map((error: ValidationError) => Object.values(error.constraints!)).join(', ');
-        throw { detailMessage: message, message: "game/wrong-document-format" };
-    }
-
-    if (reqBody.boardSideLength < 3) {
-        throw { detailMessage: "Board size is too small to play game", message: "game/illegal-length" };
-    }
+export const createBoardService = async (uid: string, dto: CreateGameReqDto): Promise<CreateGameResDto> => {
 
 
     const newGame: GameSchema = {
         id: uuidv4(),
-        boardSideLength: reqBody.boardSideLength,
-        player1Id: reqBody.playerId,
+        boardSideLength: dto.boardSideLength,
+        player1Id: uid,
         player2Id: null,
-        currPlayerId: reqBody.playerId,
+        currPlayerId: uid,
         winnerId: null,
         status: "waiting",
         player1MoveList: [],
@@ -41,8 +26,23 @@ export const createBoardService = async (request: functions.https.Request) => {
     };
 
     return CreateGameResDto.fromSchema(await GameRepository.createGame(newGame));
-};
+}
 
-export const makeMove = async (request: functions.https.Request) => {
+/**
+ * 
+ * @param uid 
+ * @param dto 
+ * @returns 
+ */
+export const joinBoardService = async (uid: string, dto: JoinGameReqDto) => {
 
+    const game = await GameRepository.getGameObject(dto.gameId);
+    if (!game) {
+        throw { detailMessage: "game doesn't exists", message: "data/find-game" };
+    } else if (game.status != "waiting") {
+        return JoinGameResDto.getReturnJson(false, "unable to join game");
+    } else {
+        await GameRepository.joinGame(game, uid);
+        return JoinGameResDto.getReturnJson(true, "success");
+    }
 }

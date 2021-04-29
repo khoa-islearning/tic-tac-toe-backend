@@ -9,7 +9,7 @@ import admin from "firebase-admin";
 export const handleJwtToken = async (request: functions.https.Request): Promise<admin.auth.UserRecord> => {
     let myJwt: string;
     try {
-        myJwt = await extractJwt(request);
+        myJwt = extractJwt(request);
     } catch (error) {
         throw { detailMessage: "Missing JWT Token from Request", message: "auth/missing-jwt" };
     }
@@ -17,6 +17,7 @@ export const handleJwtToken = async (request: functions.https.Request): Promise<
     try {
         return await extractFirebaseUser(myJwt);
     } catch (error) {
+        console.log(error);
         throw { detailMessage: "User is not authorized", message: "auth/user-not-authorized" };
     }
 
@@ -29,9 +30,10 @@ export const handleJwtToken = async (request: functions.https.Request): Promise<
  */
 const extractFirebaseUser = async (jwt: string): Promise<admin.auth.UserRecord> => {
     try {
-        admin.auth().verifyIdToken(jwt);
-        return await admin.auth().getUser(jwt);
+        const decodedToken = await admin.auth().verifyIdToken(jwt);
+        return await admin.auth().getUser(decodedToken.uid);
     } catch (error) {
+        console.log(error);
         throw new Error("user doesnt't exists")
     }
 }
@@ -40,7 +42,7 @@ const extractFirebaseUser = async (jwt: string): Promise<admin.auth.UserRecord> 
  * @param request 
  * @returns 
  */
-const extractJwt = async (request: functions.https.Request) => {
+const extractJwt = (request: functions.https.Request) => {
 
     const myBearer = request.headers.authorization;
 
