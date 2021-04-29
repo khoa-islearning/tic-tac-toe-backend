@@ -23,4 +23,19 @@ export class GameRepository {
                 const db = admin.firestore();
                 return (await db.collection("gameCollection").doc(id).get()).data() as GameSchema;
         }
+
+        /**
+         * 
+         * @param game game player want to join
+         * @param playerId the player that join the game
+         */
+        static async joinGame(game: GameSchema, playerId: string) {
+                const db = admin.firestore();
+
+                const toMerge = {
+                        player2Id: playerId,
+                        status: "playing",
+                }
+                await db.collection("gameCollection").doc(game.id).set(toMerge, { merge: true });
+        }
 }

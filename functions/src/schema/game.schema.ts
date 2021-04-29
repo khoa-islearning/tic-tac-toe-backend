@@ -1,4 +1,3 @@
-
 /** schema of a game */
 export type statusFlag = "playing" | "waiting" | "played" | "abandoned";
 export interface GameSchema {
