@@ -9,7 +9,6 @@ import {
 import { GameRepository } from "../repositories/game.repositories";
 import { GameSchema } from "../schema/game.schema";
 import { v4 as uuidv4 } from "uuid";
-
 /**
  *
  * @param uid
@@ -166,6 +165,7 @@ function winVertical(
   }
   return false;
 }
+
 
 function winDiagonal(
   sideLength: number,

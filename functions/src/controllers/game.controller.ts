@@ -1,6 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import * as functions from "firebase-functions";
+
 import {
   CreateGameReqDto,
   JoinGameReqDto,
@@ -141,7 +142,6 @@ export const makeMoveController = async (
         case "auth/missing-jwt":
           response.status(400).send(error.detailMessage);
           break;
-
         case "auth/user-not-authorized":
           response.status(401).send(error.detailMessage);
           break;
@@ -161,3 +161,4 @@ export const makeMoveController = async (
     }
   }
 };
+

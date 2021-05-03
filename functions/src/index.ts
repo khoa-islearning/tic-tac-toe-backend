@@ -7,6 +7,7 @@ import {
 } from "./controllers/game.controller.js";
 import { seedStuff } from "./loaders/mock.loader.js";
 
+
 admin.initializeApp();
 
 export const createGame = functions.https.onRequest(createGameController);
@@ -18,3 +19,4 @@ export const makeMove = functions.https.onRequest(makeMoveController);
 if (process.env.FUNCTIONS_EMULATOR === "true") {
   seedStuff();
 }
+

@@ -26,6 +26,7 @@ export class JoinGameReqDto {
   userId: string;
 }
 
+
 export type joinStatus = "joined" | "failed";
 export class JoinGameResDto {
   result: joinStatus;
