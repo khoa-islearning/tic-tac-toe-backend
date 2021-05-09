@@ -83,6 +83,7 @@ export class GameRepository {
     const db = admin.firestore();
     const toMerge = {
       status: "played",
+      winnerId: game.currPlayerId,
     };
     await db
       .collection("gameCollection")

@@ -44,10 +44,10 @@ export const joinBoardService = async (dto: JoinGameReqDto) => {
   if (!game) {
     throw { detailMessage: "game doesn't exists", message: "data/find-game" };
   } else if (game.status != "waiting") {
-    return JoinGameResDto.getReturnJson(false, "unable to join game");
+    return JoinGameResDto.getReturnJson(false, "unable to join game", game);
   } else {
     await GameRepository.joinGame(game, dto.userId);
-    return JoinGameResDto.getReturnJson(true, "success");
+    return JoinGameResDto.getReturnJson(true, "success", game);
   }
 };
 
@@ -88,7 +88,7 @@ export const makeMoveService = async (dto: makeMoveReqDto) => {
     if (won) {
       GameRepository.won(game);
     }
-    return makeMoveResDto.getReturnJson(won);
+    return makeMoveResDto.getReturnJson(won, game);
   }
 };
 

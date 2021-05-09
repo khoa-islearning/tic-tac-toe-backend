@@ -18,14 +18,13 @@ import * as boardService from "../services/game.service";
  */
 export const createGameController = async (
   request: functions.https.Request,
-  response: functions.Response<any>
+  response: functions.Response<any>,
 ) => {
   try {
     // const user = await handleJwtToken(request);
     // if (!user) {
     //   return;
     // }
-
     const reqBody = plainToClass(CreateGameReqDto, request.body);
     const errors: ValidationError[] = await validate(reqBody);
     if (errors.length > 0) {
@@ -53,6 +52,7 @@ export const createGameController = async (
 
         case "createGame/wrong-format":
           response.status(400).send(error.detailMessage);
+          break;
 
         case "data/create-game":
           response.status(500).send();
@@ -73,7 +73,7 @@ export const createGameController = async (
  */
 export const joinGameController = async (
   request: functions.https.Request,
-  response: functions.Response<any>
+  response: functions.Response<any>,
 ) => {
   try {
     // const user = await handleJwtToken(request);
@@ -108,6 +108,7 @@ export const joinGameController = async (
 
         case "data/find-game":
           response.status(400).send(error.detailMessage);
+          break;
       }
     } else {
       console.log(error);
@@ -118,7 +119,7 @@ export const joinGameController = async (
 
 export const makeMoveController = async (
   request: functions.https.Request,
-  response: functions.Response<any>
+  response: functions.Response<any>,
 ) => {
   try {
     // const user = await handleJwtToken(request);
@@ -135,7 +136,8 @@ export const makeMoveController = async (
         .join(", ");
       throw { detailMessage: message, message: "makeMove/wrong-format" };
     }
-    response.status(200).send(await boardService.makeMoveService(reqBody));
+    const toReturn = await boardService.makeMoveService(reqBody); 
+    response.status(200).send(toReturn);
   } catch (error) {
     if (error.message && error.detailMessage) {
       switch (error.message) {
@@ -154,6 +156,7 @@ export const makeMoveController = async (
 
         case "data/find-game":
           response.status(400).send(error.detailMessage);
+          break;
       }
     } else {
       console.log(error);
@@ -161,4 +164,3 @@ export const makeMoveController = async (
     }
   }
 };
-

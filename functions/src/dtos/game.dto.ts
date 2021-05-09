@@ -31,6 +31,7 @@ export type joinStatus = "joined" | "failed";
 export class JoinGameResDto {
   result: joinStatus;
   message: string;
+  game: GameSchema;
 
   /**
    *
@@ -40,17 +41,20 @@ export class JoinGameResDto {
    */
   static getReturnJson(
     joinResult: boolean,
-    joinMessage: string
+    joinMessage: string,
+    game: GameSchema
   ): JoinGameResDto {
     if (joinResult) {
       return {
         result: "joined",
         message: joinMessage,
+        game: game
       };
     }
     return {
       result: "failed",
       message: joinMessage,
+      game: game
     };
   }
 }
@@ -66,10 +70,12 @@ export class makeMoveReqDto {
 
 export class makeMoveResDto {
   isWon: boolean;
+  game: GameSchema;
 
-  static getReturnJson(wonStatus: boolean): makeMoveResDto {
+  static getReturnJson(wonStatus: boolean, game: GameSchema): makeMoveResDto {
     return {
       isWon: wonStatus,
+      game: game
     };
   }
 }

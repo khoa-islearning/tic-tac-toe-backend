@@ -6,17 +6,29 @@ import {
   makeMoveController,
 } from "./controllers/game.controller.js";
 import { seedStuff } from "./loaders/mock.loader.js";
-
+import cors from "cors";
 
 admin.initializeApp();
+const corsHandler = cors({ origin: true });
 
-export const createGame = functions.https.onRequest(createGameController);
+export const createGame = functions.https.onRequest((req, res) => {
+  corsHandler(req, res, () => {
+    createGameController(req, res);
+  });
+});
 
-export const joinGame = functions.https.onRequest(joinGameController);
+export const joinGame = functions.https.onRequest((req, res) => {
+  corsHandler(req, res, () => {
+    joinGameController(req, res);
+  });
+});
 
-export const makeMove = functions.https.onRequest(makeMoveController);
+export const makeMove = functions.https.onRequest((req, res) => {
+  corsHandler(req, res, () => {
+    makeMoveController(req, res);
+  });
+});
 
 if (process.env.FUNCTIONS_EMULATOR === "true") {
   seedStuff();
 }
-
