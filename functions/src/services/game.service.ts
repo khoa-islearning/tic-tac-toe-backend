@@ -84,10 +84,17 @@ export const makeMoveService = async (dto: makeMoveReqDto) => {
     if (!resultGame) {
       throw { detailMessage: "game doesn't exists", message: "data/find-game" };
     }
-    const won = isWon(resultGame, flag, dto.move);
+
+    let moveList = game.player1MoveList;
+    if (flag === 2) {
+      moveList = game.player2MoveList;
+    }
+
+    const won = isWon(game.boardSideLength, moveList, dto.move);
     if (won) {
       GameRepository.won(game);
     }
+
     return makeMoveResDto.getReturnJson(won, game);
   }
 };
@@ -103,17 +110,16 @@ const findPlayerFlag = (player: string, game: GameSchema): playerFlag => {
 
 export type playerFlag = 0 | 1 | 2;
 
-function isWon(game: GameSchema, player: playerFlag, move: number): boolean {
+export function isWon(
+  boardSideLength: number,
+  moveList: number[],
+  move: number
+): boolean {
   const moveToWin = 3;
-  let moveList = game.player1MoveList;
-  if (player === 2) {
-    moveList = game.player2MoveList;
-  }
-  return (
-    winHorizontal(game.boardSideLength, move, moveList, moveToWin) ||
-    winVertical(game.boardSideLength, move, moveList, moveToWin) ||
-    winDiagonal(game.boardSideLength, move, moveList, moveToWin)
-  );
+  const horizontal = winHorizontal(boardSideLength, move, moveList, moveToWin);
+  const vertical = winVertical(boardSideLength, move, moveList, moveToWin);
+  const diagonal = winDiagonal(boardSideLength, move, moveList, moveToWin);
+  return horizontal || vertical || diagonal;
 }
 
 function winHorizontal(
@@ -124,9 +130,7 @@ function winHorizontal(
 ): boolean {
   const winList = new Array<number>();
   for (let i = -moveToWin + 1; i < moveToWin; i++) {
-    if (Math.floor((i + move) / sideLength) === Math.floor(move / sideLength)) {
       winList.push(i + move);
-    }
   }
   let count = 0;
   for (let i of winList) {
@@ -149,7 +153,7 @@ function winVertical(
   moveToWin: number
 ): boolean {
   const winList = new Array<number>();
-  for (let i = -moveToWin + 1; i < moveToWin; i++) {
+  for (let i = -moveToWin + 2; i < moveToWin -1; i++) {
     winList.push(i * sideLength + move);
   }
   let count = 0;
@@ -166,7 +170,6 @@ function winVertical(
   return false;
 }
 
-
 function winDiagonal(
   sideLength: number,
   move: number,
@@ -174,12 +177,12 @@ function winDiagonal(
   moveToWin: number
 ): boolean {
   const winList1 = new Array<number>();
-  for (let i = -moveToWin + 1; i < moveToWin; i++) {
+  for (let i = -moveToWin + 2; i < moveToWin-1; i++) {
     winList1.push(i * sideLength + i + move);
   }
 
   const winList2 = new Array<number>();
-  for (let i = -moveToWin + 1; i < moveToWin; i++) {
+  for (let i = -moveToWin + 2; i < moveToWin - 1; i++) {
     winList2.push(i * sideLength - i + move);
   }
 
@@ -194,7 +197,7 @@ function winDiagonal(
       return true;
     }
   }
-
+  count = 0;
   for (let i of winList2) {
     if (moveList.includes(i)) {
       count++;

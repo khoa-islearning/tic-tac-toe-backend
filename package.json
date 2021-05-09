@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/cors": "^2.8.10",
     "cors": "^2.8.5"
   }
 }
