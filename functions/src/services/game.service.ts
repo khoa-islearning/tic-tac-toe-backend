@@ -129,8 +129,11 @@ function winHorizontal(
   moveToWin: number
 ): boolean {
   const winList = new Array<number>();
-  for (let i = -moveToWin + 1; i < moveToWin; i++) {
-      winList.push(i + move);
+  const xPos = move % sideLength;
+  const lowBound = Math.max(-moveToWin + 1, -xPos);
+  const highBound = Math.min(moveToWin, sideLength - xPos);
+  for (let i = lowBound; i < highBound; i++) {
+    winList.push(i + move);
   }
   let count = 0;
   for (let i of winList) {
@@ -153,10 +156,18 @@ function winVertical(
   moveToWin: number
 ): boolean {
   const winList = new Array<number>();
-  for (let i = -moveToWin + 2; i < moveToWin -1; i++) {
-    winList.push(i * sideLength + move);
+  const yPos = Math.floor(move / sideLength);
+
+  const lowBound = Math.max(-moveToWin + 1, -yPos);
+  const highBound = Math.min(moveToWin, sideLength - yPos);
+
+  for (let i = lowBound; i < highBound; i++) {
+    const j = i * sideLength + move;
+    winList.push(j);
   }
+
   let count = 0;
+
   for (let i of winList) {
     if (moveList.includes(i)) {
       count++;
@@ -177,13 +188,26 @@ function winDiagonal(
   moveToWin: number
 ): boolean {
   const winList1 = new Array<number>();
-  for (let i = -moveToWin + 2; i < moveToWin-1; i++) {
-    winList1.push(i * sideLength + i + move);
+
+  const yPos = Math.floor(move / sideLength);
+  const xPos = move % sideLength;
+
+  let lowBound = Math.max(-moveToWin + 1, -yPos, -xPos);
+  let highBound = Math.min(moveToWin, sideLength - xPos, sideLength - yPos);
+
+  for (let i = lowBound; i < highBound; i++) {
+    const j = i * sideLength + i + move;
+    winList1.push(j);
   }
 
+  lowBound = Math.max(-moveToWin + 1, -sideLength + xPos,  -yPos);
+  highBound = Math.min(moveToWin, xPos+1,  sideLength - yPos);
+
+
   const winList2 = new Array<number>();
-  for (let i = -moveToWin + 2; i < moveToWin - 1; i++) {
-    winList2.push(i * sideLength - i + move);
+  for (let i = lowBound; i < highBound; i++) {
+    const j = i * sideLength - i + move;
+    winList2.push(j);
   }
 
   let count = 0;
@@ -208,7 +232,6 @@ function winDiagonal(
       return true;
     }
   }
-
   return false;
 }
 

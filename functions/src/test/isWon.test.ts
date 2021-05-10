@@ -1,34 +1,68 @@
 import { isWon } from "../services/game.service";
+// // true
 
-test("\n|X| | |\n| |X| |\n| | |X|\ntrue", () => {
-  expect(isWon(3, [0, 4, 8], 4)).toBe(true);
-});
-
-test("\n| | |X|\n| |X| |\n|X| | |\ntrue", () => {
-  expect(isWon(3, [2, 4, 6], 4)).toBe(true);
-});
-
-test("\n| |X| |\n| |X| |\n| |x| |\ntrue", () => {
+test("\n| |x| |\n| |X| |\n| |x| |\ntrue", () => {
   expect(isWon(3, [1, 4, 7], 4)).toBe(true);
 });
 
-test("\n| | | |\n|X|X|X|\n| | | |\ntrue", () => {
+test("\n| |X| |\n| |x| |\n| |x| |\ntrue", () => {
+  expect(isWon(3, [1, 4, 7], 1)).toBe(true);
+});
+
+test("\n| |x| |\n| |x| |\n| |X| |\ntrue", () => {
+  expect(isWon(3, [1, 4, 7], 7)).toBe(true);
+});
+
+test("\n|x| | |\n| |X| |\n| | |x|\ntrue", () => {
+  expect(isWon(3, [0, 4, 8], 4)).toBe(true);
+});
+test("\n|X| | |\n| |x| |\n| | |x|\ntrue", () => {
+  expect(isWon(3, [0, 4, 8], 0)).toBe(true);
+});
+test("\n|x| | |\n| |x| |\n| | |X|\ntrue", () => {
+  expect(isWon(3, [0, 4, 8], 8)).toBe(true);
+});
+
+test("\n| | |x|\n| |X| |\n|x| | |\ntrue", () => {
+  expect(isWon(3, [2, 4, 6], 4)).toBe(true);
+});
+
+test("\n| | |X|\n| |x| |\n|x| | |\ntrue", () => {
+  expect(isWon(3, [2, 4, 6], 2)).toBe(true);
+});
+
+test("\n| | |x|\n| |x| |\n|X| | |\ntrue", () => {
+  expect(isWon(3, [2, 4, 6], 6)).toBe(true);
+});
+
+
+test("\n| | | |\n|x|X|x|\n| | | |\ntrue", () => {
   expect(isWon(3, [3, 4, 5], 4)).toBe(true);
 });
 
-test("\n|X| |X|\n| |X| |\n| | | |\nfalse", () => {
+test("\n| | | |\n|X|x|x|\n| | | |\ntrue", () => {
+  expect(isWon(3, [3, 4, 5], 3)).toBe(true);
+});
+
+test("\n| | | |\n|x|x|X|\n| | | |\ntrue", () => {
+  expect(isWon(3, [3, 4, 5], 5)).toBe(true);
+});
+
+// false
+
+test("\n|x| |x|\n| |X| |\n| | | |\nfalse", () => {
   expect(isWon(3, [0, 2, 4], 4)).toBe(false);
 });
 
-test("\n| | | |\n| |X| |\n|X| |X|\nfalse", () => {
+test("\n| | | |\n| |X| |\n|x| |x|\nfalse", () => {
   expect(isWon(3, [6, 4, 8], 4)).toBe(false);
 });
 
-test("\n|X| | |\n| |X|X|\n| | | |\nfalse", () => {
+test("\n|x| | |\n| |X|x|\n| | | |\nfalse", () => {
   expect(isWon(3, [0, 4, 5], 4)).toBe(false);
 });
 
-test("\n|X| | |\n| |X| |\n| |X| |\nfalse", () => {
+test("\n|x| | |\n| |X| |\n| |x| |\nfalse", () => {
   expect(isWon(3, [0, 4, 7], 4)).toBe(false);
 });
 
