@@ -1,5 +1,6 @@
 import { isWon } from "../services/game.service";
-// // true
+
+
 
 test("\n| |x| |\n| |X| |\n| |x| |\ntrue", () => {
   expect(isWon(3, [1, 4, 7], 4)).toBe(true);
@@ -48,7 +49,6 @@ test("\n| | | |\n|x|x|X|\n| | | |\ntrue", () => {
   expect(isWon(3, [3, 4, 5], 5)).toBe(true);
 });
 
-// false
 
 test("\n|x| |x|\n| |X| |\n| | | |\nfalse", () => {
   expect(isWon(3, [0, 2, 4], 4)).toBe(false);
