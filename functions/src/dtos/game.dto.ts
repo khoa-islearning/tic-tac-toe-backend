@@ -26,7 +26,6 @@ export class JoinGameReqDto {
   userId: string;
 }
 
-
 export type joinStatus = "joined" | "failed";
 export class JoinGameResDto {
   result: joinStatus;
@@ -48,13 +47,13 @@ export class JoinGameResDto {
       return {
         result: "joined",
         message: joinMessage,
-        game: game
+        game: game,
       };
     }
     return {
       result: "failed",
       message: joinMessage,
-      game: game
+      game: game,
     };
   }
 }
@@ -75,7 +74,7 @@ export class makeMoveResDto {
   static getReturnJson(wonStatus: boolean, game: GameSchema): makeMoveResDto {
     return {
       isWon: wonStatus,
-      game: game
+      game: game,
     };
   }
 }

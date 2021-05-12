@@ -200,9 +200,8 @@ function winDiagonal(
     winList1.push(j);
   }
 
-  lowBound = Math.max(-moveToWin + 1, -sideLength + xPos,  -yPos);
-  highBound = Math.min(moveToWin, xPos+1,  sideLength - yPos);
-
+  lowBound = Math.max(-moveToWin + 1, -sideLength + xPos, -yPos);
+  highBound = Math.min(moveToWin, xPos + 1, sideLength - yPos);
 
   const winList2 = new Array<number>();
   for (let i = lowBound; i < highBound; i++) {

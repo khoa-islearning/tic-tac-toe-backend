@@ -8,7 +8,7 @@ import {
   makeMoveReqDto,
 } from "../dtos/game.dto";
 import * as boardService from "../services/game.service";
-// import { handleJwtToken } from "../utilities/firebase.util";
+import { handleJwtToken } from "../utilities/firebase.util";
 
 /**
  *
@@ -18,13 +18,13 @@ import * as boardService from "../services/game.service";
  */
 export const createGameController = async (
   request: functions.https.Request,
-  response: functions.Response<any>,
+  response: functions.Response<any>
 ) => {
   try {
-    // const user = await handleJwtToken(request);
-    // if (!user) {
-    //   return;
-    // }
+    const user = await handleJwtToken(request);
+    if (!user) {
+      return;
+    }
     const reqBody = plainToClass(CreateGameReqDto, request.body);
     const errors: ValidationError[] = await validate(reqBody);
     if (errors.length > 0) {
@@ -73,13 +73,13 @@ export const createGameController = async (
  */
 export const joinGameController = async (
   request: functions.https.Request,
-  response: functions.Response<any>,
+  response: functions.Response<any>
 ) => {
   try {
-    // const user = await handleJwtToken(request);
-    // if (!user) {
-    //   return;
-    // }
+    const user = await handleJwtToken(request);
+    if (!user) {
+      return;
+    }
 
     const reqBody: JoinGameReqDto = plainToClass(JoinGameReqDto, request.body);
     const errors: ValidationError[] = await validate(reqBody);
@@ -119,13 +119,13 @@ export const joinGameController = async (
 
 export const makeMoveController = async (
   request: functions.https.Request,
-  response: functions.Response<any>,
+  response: functions.Response<any>
 ) => {
   try {
-    // const user = await handleJwtToken(request);
-    // if (!user) {
-    //   return;
-    // }
+    const user = await handleJwtToken(request);
+    if (!user) {
+      return;
+    }
 
     const reqBody: makeMoveReqDto = plainToClass(makeMoveReqDto, request.body);
     const errors: ValidationError[] = await validate(reqBody);
@@ -136,7 +136,7 @@ export const makeMoveController = async (
         .join(", ");
       throw { detailMessage: message, message: "makeMove/wrong-format" };
     }
-    const toReturn = await boardService.makeMoveService(reqBody); 
+    const toReturn = await boardService.makeMoveService(reqBody);
     response.status(200).send(toReturn);
   } catch (error) {
     if (error.message && error.detailMessage) {

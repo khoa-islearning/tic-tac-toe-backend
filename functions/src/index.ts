@@ -4,8 +4,8 @@ import {
   createGameController,
   joinGameController,
   makeMoveController,
-} from "./controllers/game.controller.js";
-import { seedStuff } from "./loaders/mock.loader.js";
+} from "./controllers/game.controller";
+import { seedStuff } from "./loaders/mock.loader";
 import cors from "cors";
 
 admin.initializeApp();

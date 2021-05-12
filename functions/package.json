@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "eslint --ext .js,.ts .",
+    "lint": "eslint src/*.ts",
     "build": "tsc",
     "serve": "npm run build-watch",
     "shell": "npm run build && firebase functions:shell",

@@ -37,8 +37,8 @@ export class GameRepository {
     const db = admin.firestore();
 
     const toMerge = {
-      player2Id:  playerId as  GameSchema["player2Id"],
-      status: "playing" as  GameSchema["status"],
+      player2Id: playerId as GameSchema["player2Id"],
+      status: "playing" as GameSchema["status"],
     };
     await db
       .collection("gameCollection")
@@ -55,8 +55,8 @@ export class GameRepository {
     const db = admin.firestore();
 
     if (flag == 1) {
-      const temp =  game.player1MoveList;
-      temp.push(move)
+      const temp = game.player1MoveList;
+      temp.push(move);
       const toMerge = {
         player1MoveList: temp,
         currPlayerId: game.player2Id,
@@ -66,8 +66,8 @@ export class GameRepository {
         .doc(game.id)
         .set(toMerge, { merge: true });
     } else {
-      const temp =  game.player2MoveList;
-      temp.push(move)
+      const temp = game.player2MoveList;
+      temp.push(move);
       const toMerge = {
         player2MoveList: temp,
         currPlayerId: game.player1Id,
